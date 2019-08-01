@@ -37,4 +37,17 @@ describe('', () => {
     let pr = cal.reportDiscount(product);
     expect(pr).equal(0.00.toPrecision(3));
   });
+   //SELECTIVE
+   it('SPECIALDISCOUNT:should  return 19.84', () => {
+    const cal = new Calculator();
+    let product: Product = new Product('bag', 20.25, 1);
+    let pr = cal.doDiscount(product,20,15,7,1);
+    expect(pr).equal(19.84.toPrecision(4));
+  });
+  it('SPECIALDISCOUNT:should  return 21.26', () => {
+    const  cal = new Calculator();
+    let product: Product = new Product('bag', 20.25, 1);
+    let pr = cal.doDiscount(product,20,15,7,11);
+    expect(pr).equal(21.26.toPrecision(4));
+  });
 });

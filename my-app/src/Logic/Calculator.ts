@@ -35,10 +35,16 @@ export class Calculator {
         let after_tax=Math_stuff.precision2(val)
         return after_tax;
     } 
-    doDiscount(product:Product, tax:number, discount:number){
+    doDiscount(product:Product, tax:number, discount:number, UPC_discount?:number, upc?:number){
         let taxPrice=parseFloat(this.doTax(product.price,tax))
+        if (UPC_discount!=undefined && product.UPC==upc){
+            return this.specialDiscount(taxPrice,product,UPC_discount+discount)
+        }
         let discountPrice= taxPrice-discount*product.price/100
-
+        return Math_stuff.precision2(discountPrice);
+    }
+    specialDiscount(taxPrice:number,prod:Product,discount:number){
+        let discountPrice= taxPrice-discount*prod.price/100
         return Math_stuff.precision2(discountPrice);
     }
     reportDiscount(product:Product, discount: number=0){

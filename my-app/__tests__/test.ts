@@ -17,4 +17,11 @@ describe('', () => {
     let pr = cal.doTax(product.price, 21);
     expect(pr).equal(24.50.toPrecision(4));
   });
+  //DISCOUNT
+  it('DISCOUNT:should  return 21.26', () => {
+    const cal = new Calculator();
+    let product: Product = new Product('bag', 20.25, 1);
+    let pr = cal.doDiscount(product, 20,15);
+    expect(pr).equal(21.26.toPrecision(4));
+  });
 });

@@ -38,8 +38,12 @@ export class Calculator {
     doDiscount(product:Product, tax:number, discount:number){
         let taxPrice=parseFloat(this.doTax(product.price,tax))
         let discountPrice= taxPrice-discount*product.price/100
-        
+
         return Math_stuff.precision2(discountPrice);
+    }
+    reportDiscount(product:Product, discount: number=0){
+        let val=product.price*discount/100;
+        return Math_stuff.precision2(val)
     }
 }
 

@@ -24,4 +24,17 @@ describe('', () => {
     let pr = cal.doDiscount(product, 20,15);
     expect(pr).equal(21.26.toPrecision(4));
   });
+   //REPORT
+   it('REPORT:should  return 3.04', () => {
+    const cal = new Calculator();
+    let product: Product = new Product('bag', 20.25, 1);
+    let pr = cal.reportDiscount(product,15);
+    expect(pr).equal(3.04.toPrecision(3));
+  });
+  it('REPORT:should  return 0.00', () => {
+    const cal = new Calculator();
+    let product: Product = new Product('bag', 20.25, 1);
+    let pr = cal.reportDiscount(product);
+    expect(pr).equal(0.00.toPrecision(3));
+  });
 });

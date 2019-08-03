@@ -35,20 +35,26 @@ export class Calculator {
         let after_tax=Math_stuff.precision2(val)
         return after_tax;
     } 
-    doDiscount(product:Product, tax:number, discount:number[], UPC_discount?:number[], upc?:number){
+    doDiscount(product:Product, tax:number, discount:number[],additive:boolean, UPC_discount?:number[], upc?:number){
         let taxPrice=parseFloat(this.doTax(product.price,tax))
         if (UPC_discount!=undefined && product.UPC==upc){
-            return this.specialDiscount(product,tax,discount,UPC_discount)
+            return this.specialDiscount(product,tax,discount,UPC_discount,additive)
         }
-        return this.regularDiscount(product,tax,discount)
+        return this.regularDiscount(product,tax,discount,additive)
     }
-    specialDiscount(product:Product,tax:number,discount:number[],UPC_discount:number[]){
+    specialDiscount(product:Product,tax:number,discount:number[],UPC_discount:number[],additive:boolean){
         let val;
         let taxPrice;
         //2 discounts after tax
         if (discount[1]==1 && UPC_discount[1]==1){
             taxPrice=parseFloat(this.doTax(product.price,tax))
-            val=taxPrice-((discount[0]+UPC_discount[0])*product.price/100)
+            if (additive==true){
+                val=taxPrice-((discount[0]+UPC_discount[0])*product.price/100)
+            }
+            else {
+                let discount1=discount[0]*product.price/100
+                val=taxPrice-(UPC_discount[0]*(product.price-discount1)/100)-discount1;
+            }
             return Math_stuff.precision2(val);
         }
         //2 discounts before tax
@@ -71,7 +77,7 @@ export class Calculator {
             return Math_stuff.precision2(finalPrice)
         }
     }
-    regularDiscount(product:Product,tax:number,discount:number[]){
+    regularDiscount(product:Product,tax:number,discount:number[],additive:boolean){
         let taxPrice;
         let val;
         //after tax
@@ -91,8 +97,8 @@ export class Calculator {
         let val=product.price*discount/100;
         return Math_stuff.precision2(val)
     }
-    withExpenses(prod:Product,tax:number,discount:number[],UPC_discount?:number[],upc?:number,expenses:number[]=[0,0]){
-        let discounted_Price=parseFloat(this.doDiscount(prod,tax,discount,UPC_discount,upc))
+    withExpenses(prod:Product,tax:number,discount:number[],additive:boolean,UPC_discount?:number[],upc?:number,expenses:number[]=[0,0]){
+        let discounted_Price=parseFloat(this.doDiscount(prod,tax,discount,additive,UPC_discount,upc))
         console.log("dp:"+discounted_Price)
         for (let i=0;i<expenses.length;i++){
             //value not percentage

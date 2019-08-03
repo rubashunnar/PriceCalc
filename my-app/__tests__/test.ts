@@ -21,7 +21,7 @@ describe('', () => {
   it('DISCOUNT:should  return 21.26', () => {
     const cal = new Calculator();
     let product: Product = new Product('bag', 20.25, 1);
-    let pr = cal.doDiscount(product, 20,15);
+    let pr = cal.doDiscount(product, 20,[15,1]);
     expect(pr).equal(21.26.toPrecision(4));
   });
    //REPORT
@@ -41,13 +41,20 @@ describe('', () => {
    it('SPECIALDISCOUNT:should  return 19.84', () => {
     const cal = new Calculator();
     let product: Product = new Product('bag', 20.25, 1);
-    let pr = cal.doDiscount(product,20,15,7,1);
+    let pr = cal.doDiscount(product,20,[15,1],[7,1],1);
     expect(pr).equal(19.84.toPrecision(4));
   });
   it('SPECIALDISCOUNT:should  return 21.26', () => {
     const  cal = new Calculator();
     let product: Product = new Product('bag', 20.25, 1);
-    let pr = cal.doDiscount(product,20,15,7,11);
+    let pr = cal.doDiscount(product,20,[15,1],[7,1],11);
     expect(pr).equal(21.26.toPrecision(4));
+  });
+  //Precedence
+  it('PRECEDENCE:should  return $19.78', () => {
+    const  cal = new Calculator();
+    let product: Product = new Product('bag', 20.25, 1);
+    let pr = cal.doDiscount(product,20,[15,1],[7,0],1);
+    expect(pr).equal(19.78.toPrecision(4));
   });
 });

@@ -35,17 +35,57 @@ export class Calculator {
         let after_tax=Math_stuff.precision2(val)
         return after_tax;
     } 
-    doDiscount(product:Product, tax:number, discount:number, UPC_discount?:number, upc?:number){
+    doDiscount(product:Product, tax:number, discount:number[], UPC_discount?:number[], upc?:number){
         let taxPrice=parseFloat(this.doTax(product.price,tax))
         if (UPC_discount!=undefined && product.UPC==upc){
-            return this.specialDiscount(taxPrice,product,UPC_discount+discount)
+            return this.specialDiscount(product,tax,discount,UPC_discount)
         }
-        let discountPrice= taxPrice-discount*product.price/100
-        return Math_stuff.precision2(discountPrice);
+        return this.regularDiscount(product,tax,discount)
     }
-    specialDiscount(taxPrice:number,prod:Product,discount:number){
-        let discountPrice= taxPrice-discount*prod.price/100
-        return Math_stuff.precision2(discountPrice);
+    specialDiscount(product:Product,tax:number,discount:number[],UPC_discount:number[]){
+        let val;
+        let taxPrice;
+        //2 discounts after tax
+        if (discount[1]==1 && UPC_discount[1]==1){
+            taxPrice=parseFloat(this.doTax(product.price,tax))
+            val=taxPrice-((discount[0]+UPC_discount[0])*product.price/100)
+            return Math_stuff.precision2(val);
+        }
+        //2 discounts before tax
+        else if ((discount[1]==0 && UPC_discount[1]==0)){
+            val=product.price-((discount[0]+UPC_discount[0])*product.price/100)
+            taxPrice=parseFloat(this.doTax(val,tax))
+            return Math_stuff.precision2(taxPrice)
+        }
+        //universal discount after tax
+        else if(discount[1]==1 && UPC_discount[1]==0){
+            val=product.price-(UPC_discount[0]*product.price/100)
+            taxPrice=parseFloat(this.doTax(val,tax))
+            let finalPrice=taxPrice-((discount[0])*val/100)
+            return Math_stuff.precision2(finalPrice)
+        }
+        else {
+            val=product.price-(discount[0]*product.price/100)
+            taxPrice=parseFloat(this.doTax(val,tax))
+            let finalPrice=taxPrice-((UPC_discount[0])*val/100)
+            return Math_stuff.precision2(finalPrice)
+        }
+    }
+    regularDiscount(product:Product,tax:number,discount:number[]){
+        let taxPrice;
+        let val;
+        //after tax
+        if (discount[1]==1){
+            taxPrice= parseFloat(this.doTax(product.price,tax))
+            val=taxPrice-(discount[0]*product.price/100)
+            return Math_stuff.precision2(val)
+        }
+        //before tax
+        else{
+            val=product.price-(discount[0]*product.price/100)
+            taxPrice= parseFloat(this.doTax(val,tax))
+            return Math_stuff.precision2(taxPrice)
+        }
     }
     reportDiscount(product:Product, discount: number=0){
         let val=product.price*discount/100;

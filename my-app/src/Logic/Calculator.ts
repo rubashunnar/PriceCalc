@@ -91,5 +91,18 @@ export class Calculator {
         let val=product.price*discount/100;
         return Math_stuff.precision2(val)
     }
+    withExpenses(prod:Product,tax:number,discount:number[],UPC_discount?:number[],upc?:number,expenses:number[]=[0,0]){
+        let discounted_Price=parseFloat(this.doDiscount(prod,tax,discount,UPC_discount,upc))
+        console.log("dp:"+discounted_Price)
+        for (let i=0;i<expenses.length;i++){
+            //value not percentage
+            if (expenses[i]>0)
+                discounted_Price+=expenses[i]
+            //percentage
+            else discounted_Price=discounted_Price+(prod.price*expenses[i]/-100)
+        }
+
+        return Math_stuff.precision2(discounted_Price);
+    }
 }
 

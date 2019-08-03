@@ -57,4 +57,17 @@ describe('', () => {
     let pr = cal.doDiscount(product,20,[15,1],[7,0],1);
     expect(pr).equal(19.78.toPrecision(4));
   });
+  //Expenses
+  it('Expenses:should  return  $22.45', () => {
+    const  cal = new Calculator();
+    let product: Product = new Product('bag', 20.25, 1);
+    let pr = cal.withExpenses(product,21,[15,1],[7,1],1,[-1,2.2]);
+    expect(pr).equal(22.45.toPrecision(4));
+  });
+  it('Expenses:should  return  $24.5', () => {
+    const  cal = new Calculator();
+    let product: Product = new Product('bag', 20.25, 1);
+    let pr = cal.withExpenses(product,21,[0,1],[0,1],1);
+    expect(pr).equal(24.5.toPrecision(4));
+  });
 });

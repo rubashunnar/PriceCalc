@@ -102,4 +102,17 @@ describe('', () => {
     let pr = cal.withExpenses(product,21,[15,1],true,-30,[7,1],1);
     expect(pr).equal(20.05.toPrecision(4));
   });
+  //Currency 
+  it('Currency:should  return  $24.50', () => {
+    const  cal = new Calculator();
+    let product: Product = new Product('bag', 20.25, 1);
+    let pr = cal.doDiscount(product,21,[0,1],true,-100,[0,1],1);
+    expect(pr).equal(24.5.toPrecision(4));
+  });
+  it('Currency:should  return  21.31 GBP', () => {
+    const  cal = new Calculator("GBP");
+    let product: Product = new Product('bag', 17.76, 1);
+    let pr = cal.doDiscount(product,20,[0,1],true,-100,[0,1],1);
+    expect(pr).equal(21.31.toPrecision(4));
+  });
 });

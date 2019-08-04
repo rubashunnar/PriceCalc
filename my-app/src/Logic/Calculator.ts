@@ -30,6 +30,12 @@ class Math_stuff{
 }
 
 export class Calculator {
+    Currency:string="USD";
+    constructor(curr?:string){
+        if (curr!=undefined){
+            this.Currency=curr
+        }
+    }
     doTax(price:number, tax: number) {
         let val=tax*price/100+price
         let after_tax=Math_stuff.precision2(val)
@@ -38,6 +44,7 @@ export class Calculator {
     doDiscount(product:Product, tax:number, discount:number[],additive:boolean, cap:number,UPC_discount?:number[], upc?:number){
         let taxPrice=parseFloat(this.doTax(product.price,tax))
         let price;
+        console.log("Currency:"+this.Currency);
         if (UPC_discount!=undefined && product.UPC==upc){
             return this.specialDiscount(product,tax,discount,UPC_discount,additive,cap)
         }

@@ -9,13 +9,13 @@ describe('', () => {
     const cal = new Calculator();
     let product: Product = new Product('bag', 20.25, 1);
     let pr = cal.doTax(product.price, 20);
-    expect(pr).equal(24.30.toPrecision(4));
+    expect(pr).equal(24.3000.toPrecision(6));
   });
   it('TAX:should  return 24.50', () => {
     const cal = new Calculator();
     let product: Product = new Product('bag', 20.25, 1);
     let pr = cal.doTax(product.price, 21);
-    expect(pr).equal(24.50.toPrecision(4));
+    expect(pr).equal(24.5025.toPrecision(6));
   });
   //DISCOUNT
   it('DISCOUNT:should  return 21.26', () => {
@@ -55,7 +55,7 @@ describe('', () => {
     const  cal = new Calculator();
     let product: Product = new Product('bag', 20.25, 1);
     let pr = cal.doDiscount(product,20,[15,1],true,-100,[7,0],1);
-    expect(pr).equal(19.78.toPrecision(4));
+    expect(pr).equal(19.77.toPrecision(4));
   });
   //Expenses
   it('Expenses:should  return  $22.45', () => {
@@ -118,5 +118,13 @@ describe('', () => {
     let product: Product = new Product('bag', 17.76, 1);
     let pr = cal.doDiscount(product,20,[0,1],true,-100,[0,1],1);
     expect(pr).equal(21.31.toPrecision(4));
+  });
+  //Precision
+  it('Precision:should  return  20.87', () => {
+    const  cal = new Calculator();
+    let product: Product = new Product('bag', 20.25, 1);
+    let discounted_price = parseFloat(cal.doDiscount(product,21,[15,1],false,-100,[7,1],1));
+    let pr=cal.doExpenses(product,discounted_price,[-3])
+    expect(pr).equal(20.87.toPrecision(4));
   });
 });

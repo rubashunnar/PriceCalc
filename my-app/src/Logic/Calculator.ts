@@ -24,9 +24,10 @@ export class Product{
 }
 
 class Math_stuff{
-    static precision2(value:number){
-        return (value * Math.pow(10, 2) /Math.pow(10,2)).toFixed(2);
+    static precision(value:number,n:number){
+        return (value * Math.pow(10, n) /Math.pow(10,n)).toFixed(n);
     }
+    
 }
 
 export class Calculator {
@@ -38,12 +39,10 @@ export class Calculator {
     }
     doTax(price:number, tax: number) {
         let val=tax*price/100+price
-        let after_tax=Math_stuff.precision2(val)
+        let after_tax=Math_stuff.precision(val,4)
         return after_tax;
     } 
     doDiscount(product:Product, tax:number, discount:number[],additive:boolean, cap:number,UPC_discount?:number[], upc?:number){
-        let taxPrice=parseFloat(this.doTax(product.price,tax))
-        let price;
         console.log("Currency:"+this.Currency);
         if (UPC_discount!=undefined && product.UPC==upc){
             return this.specialDiscount(product,tax,discount,UPC_discount,additive,cap)
@@ -58,6 +57,7 @@ export class Calculator {
         let capPercent=0;
         //2 discounts after tax
         if (discount[1]==1 && UPC_discount[1]==1){
+            //console.log("hiiii")
             taxPrice=parseFloat(this.doTax(product.price,tax))
             if (cap>0)//if cap in dollars
                 capPercent=cap*100/product.price
@@ -74,29 +74,30 @@ export class Calculator {
             }
             //if multiplicative discounts
             else {
+                //console.log("multiplicative")
                 let discount1=discount[0]*product.price/100
                 val=taxPrice-(UPC_discount[0]*(product.price-discount1)/100)-discount1;
             }
-            return Math_stuff.precision2(val);
+            return Math_stuff.precision(val,2);
         }
         //2 discounts before tax
         else if ((discount[1]==0 && UPC_discount[1]==0)){
             val=product.price-((discount[0]+UPC_discount[0])*product.price/100)
             taxPrice=parseFloat(this.doTax(val,tax))
-            return Math_stuff.precision2(taxPrice)
+            return Math_stuff.precision(taxPrice,2)
         }
         //universal discount after tax
         else if(discount[1]==1 && UPC_discount[1]==0){
             val=product.price-(UPC_discount[0]*product.price/100)
             taxPrice=parseFloat(this.doTax(val,tax))
             let finalPrice=taxPrice-((discount[0])*val/100)
-            return Math_stuff.precision2(finalPrice)
+            return Math_stuff.precision(finalPrice,2)
         }
         else {
             val=product.price-(discount[0]*product.price/100)
             taxPrice=parseFloat(this.doTax(val,tax))
             let finalPrice=taxPrice-((UPC_discount[0])*val/100)
-            return Math_stuff.precision2(finalPrice)
+            return Math_stuff.precision(finalPrice,2)
         }
     }
     regularDiscount(product:Product,tax:number,discount:number[],additive:boolean,cap:number){
@@ -117,18 +118,18 @@ export class Calculator {
                 price=discount[0];
             }
             val=taxPrice-(price*product.price/100)
-            return Math_stuff.precision2(val)
+            return Math_stuff.precision(val,2)
         }
         //before tax
         else{
             val=product.price-(discount[0]*product.price/100)
             taxPrice= parseFloat(this.doTax(val,tax))
-            return Math_stuff.precision2(taxPrice)
+            return Math_stuff.precision(taxPrice,2)
         }
     }
     reportDiscount(product:Product, discount: number=0){
         let val=product.price*discount/100;
-        return Math_stuff.precision2(val)
+        return Math_stuff.precision(val,2)
     }
     doExpenses(prod:Product,discounted_Price:number,expenses:number[]=[0,0]){
         for (let i=0;i<expenses.length;i++){
@@ -139,7 +140,7 @@ export class Calculator {
             else discounted_Price=discounted_Price+(prod.price*expenses[i]/-100)
         }
 
-        return Math_stuff.precision2(discounted_Price);
+        return Math_stuff.precision(discounted_Price,2);
     }
     
 }

@@ -130,9 +130,7 @@ export class Calculator {
         let val=product.price*discount/100;
         return Math_stuff.precision2(val)
     }
-    withExpenses(prod:Product,tax:number,discount:number[],additive:boolean,cap:number,UPC_discount?:number[],upc?:number,expenses:number[]=[0,0]){
-        let discounted_Price=parseFloat(this.doDiscount(prod,tax,discount,additive,cap,UPC_discount,upc))
-        console.log("dp:"+discounted_Price)
+    doExpenses(prod:Product,discounted_Price:number,expenses:number[]=[0,0]){
         for (let i=0;i<expenses.length;i++){
             //value not percentage
             if (expenses[i]>0)
